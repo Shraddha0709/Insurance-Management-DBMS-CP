@@ -103,11 +103,19 @@ def login():
     
     return render_template('login.html')
 
+
 @app.route('/register/<role>', methods=['GET', 'POST'])
 def register(role):
     if role not in ['admin', 'agent']:
         flash('Invalid registration type', 'danger')
         return redirect(url_for('index'))
+    
+    conn = get_db_connection()
+    if not conn:
+        flash('Database connection error', 'danger')
+        return redirect(url_for('index'))
+    
+    cursor = conn.cursor(dictionary=True)
     
     if request.method == 'POST':
         password = request.form.get('password')
@@ -115,31 +123,19 @@ def register(role):
         
         if password != confirm_password:
             flash('Passwords do not match', 'danger')
-            return render_template('register.html', role=role)
-        
-        conn = get_db_connection()
-        if not conn:
-            flash('Database connection error', 'danger')
-            return render_template('register.html', role=role)
-        
-        cursor = conn.cursor()
+            cursor.close()
+            conn.close()
+            return render_template('register.html', role=role, admins=get_admins(cursor) if role == 'agent' else None)
         
         try:
             hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
             
             if role == 'admin':
-                admin_id = request.form.get('admin_id').strip()
-                if len(admin_id) != 5 or not admin_id.isdigit():
-                    flash('Admin ID must be 5 digits', 'danger')
-                    return render_template('register.html', role=role)
-                
-                # Check uniqueness
-                cursor.execute("SELECT Admin_id FROM Admin WHERE Admin_id = %s", (admin_id,))
-                if cursor.fetchone():
-                    flash('Admin ID already exists', 'danger')
-                    cursor.close()
-                    conn.close()
-                    return render_template('register.html', role=role)
+                # Auto-generate Admin ID
+                cursor.execute("SELECT MAX(CAST(Admin_id AS UNSIGNED)) as max_id FROM Admin")
+                result = cursor.fetchone()
+                next_id = (result['max_id'] or 10000) + 1
+                admin_id = str(next_id).zfill(5)
                 
                 query = """INSERT INTO Admin (Admin_id, Branch_id, Name, Mobile, Email, DOB, Designation, Password)
                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
@@ -153,19 +149,26 @@ def register(role):
                     request.form.get('designation'),
                     hashed_password
                 )
-            else:  # agent
-                agency_code = request.form.get('agency_code').strip()
-                if len(agency_code) != 7 or not agency_code.isdigit():
-                    flash('Agency Code must be 7 digits', 'danger')
-                    return render_template('register.html', role=role)
                 
-                # Check uniqueness
-                cursor.execute("SELECT Agency_code FROM Agent WHERE Agency_code = %s", (agency_code,))
-                if cursor.fetchone():
-                    flash('Agency Code already exists', 'danger')
-                    cursor.close()
-                    conn.close()
-                    return render_template('register.html', role=role)
+                cursor.execute(query, values)
+                conn.commit()
+                
+                cursor.close()
+                conn.close()
+                
+                # Show success page with generated ID
+                return render_template('registration_success.html', 
+                                     role='admin',
+                                     user_id=admin_id,
+                                     name=request.form.get('name'),
+                                     email=request.form.get('email'))
+                
+            else:  # agent
+                # Auto-generate Agency Code
+                cursor.execute("SELECT MAX(CAST(Agency_code AS UNSIGNED)) as max_code FROM Agent")
+                result = cursor.fetchone()
+                next_code = (result['max_code'] or 1000000) + 1
+                agency_code = str(next_code).zfill(7)
                 
                 query = """INSERT INTO Agent (Agency_code, Admin_id, Branch_id, Name, Mobile, Email, Password)
                            VALUES (%s, %s, %s, %s, %s, %s, %s)"""
@@ -178,13 +181,19 @@ def register(role):
                     request.form.get('email'),
                     hashed_password
                 )
-            
-            cursor.execute(query, values)
-            conn.commit()
-            flash('Registration successful! Please login.', 'success')
-            cursor.close()
-            conn.close()
-            return redirect(url_for('login'))
+                
+                cursor.execute(query, values)
+                conn.commit()
+                
+                cursor.close()
+                conn.close()
+                
+                # Show success page with generated code
+                return render_template('registration_success.html',
+                                     role='agent',
+                                     user_id=agency_code,
+                                     name=request.form.get('name'),
+                                     email=request.form.get('email'))
             
         except mysql.connector.Error as e:
             conn.rollback()
@@ -192,7 +201,19 @@ def register(role):
             cursor.close()
             conn.close()
     
-    return render_template('register.html', role=role)
+    # GET request - show form
+    admins = None
+    if role == 'agent':
+        admins = get_admins(cursor)
+    
+    cursor.close()
+    conn.close()
+    return render_template('register.html', role=role, admins=admins)
+
+def get_admins(cursor):
+    """Helper function to get all admins for agent registration"""
+    cursor.execute("SELECT Admin_id, Name, Branch_id FROM Admin ORDER BY Admin_id")
+    return cursor.fetchall()
 
 @app.route('/logout')
 def logout():

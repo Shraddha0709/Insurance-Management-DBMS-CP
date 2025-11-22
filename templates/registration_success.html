@@ -1,0 +1,60 @@
+<!-- templates/registration_success.html -->
+{% extends "base.html" %}
+{% block title %}Registration Successful - IMS{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 3rem auto; text-align: center;">
+    <div class="card">
+        <div style="font-size: 4rem; color: var(--success); margin-bottom: 1rem;">✓</div>
+        <h1 style="color: var(--success); margin-bottom: 1rem;">Registration Successful!</h1>
+        
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 0.5rem; margin: 2rem 0;">
+            <p style="font-size: 0.875rem; margin-bottom: 0.5rem; opacity: 0.9;">Your {{ role|title }} ID</p>
+            <h2 style="font-size: 3rem; font-weight: bold; margin: 0; letter-spacing: 0.1em;">{{ user_id }}</h2>
+        </div>
+        
+        <div style="background: #fef3c7; border: 2px solid #f59e0b; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0; text-align: left;">
+            <h3 style="color: #92400e; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 1.5rem;">⚠️</span> Important: Save Your Credentials
+            </h3>
+            <div style="background: white; padding: 1rem; border-radius: 0.375rem; font-family: monospace; margin: 1rem 0;">
+                <p style="margin: 0.5rem 0;"><strong>User ID:</strong> {{ user_id }}</p>
+                <p style="margin: 0.5rem 0;"><strong>Name:</strong> {{ name }}</p>
+                <p style="margin: 0.5rem 0;"><strong>Email:</strong> {{ email }}</p>
+            </div>
+            <p style="color: #92400e; margin: 0.5rem 0; font-size: 0.875rem;">
+                📝 Please write down or screenshot this information. You will need your User ID to login.
+            </p>
+        </div>
+        
+        <div style="text-align: left; background: var(--light); padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 2rem;">
+            <h4 style="margin-bottom: 1rem;">Next Steps:</h4>
+            <ol style="margin: 0; padding-left: 1.5rem;">
+                <li style="margin-bottom: 0.5rem;">Save your User ID ({{ user_id }}) in a secure place</li>
+                <li style="margin-bottom: 0.5rem;">Go to the login page</li>
+                <li style="margin-bottom: 0.5rem;">Enter your User ID and password</li>
+                <li style="margin-bottom: 0.5rem;">Start managing insurance policies</li>
+            </ol>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+            <button onclick="copyToClipboard('{{ user_id }}')" class="btn btn-secondary">
+                📋 Copy User ID
+            </button>
+            <a href="{{ url_for('login') }}" class="btn btn-primary">
+                🔐 Go to Login
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        alert('User ID copied to clipboard: ' + text);
+    }, function(err) {
+        prompt('Copy this User ID:', text);
+    });
+}
+</script>
+{% endblock %}
