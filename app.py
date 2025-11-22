@@ -50,7 +50,7 @@ def login_required(role=None):
         return decorated_function
     return decorator
 
-# ==================== AUTH ROUTES ====================
+#  AUTH ROUTES 
 
 @app.route('/')
 def index():
@@ -221,14 +221,14 @@ def logout():
     flash('Logged out successfully', 'info')
     return redirect(url_for('index'))
 
-# ==================== DASHBOARD ====================
+#  DASHBOARD 
 
 @app.route('/dashboard')
 @login_required()
 def dashboard():
     return render_template('dashboard.html')
 
-# ==================== PLAN MANAGEMENT (ADMIN) ====================
+#  PLAN MANAGEMENT (ADMIN) 
 
 @app.route('/plans')
 @login_required(role='admin')
@@ -337,7 +337,7 @@ def edit_plan(plan_no):
     conn.close()
     return render_template('edit_plan.html', plan=plan)
 
-# ==================== POLICY MANAGEMENT (AGENT) ====================
+#  POLICY MANAGEMENT (AGENT) 
 
 @app.route('/policies')
 @login_required(role='agent')
@@ -484,7 +484,7 @@ def add_policy():
     conn.close()
     return render_template('add_policy.html', plans=plans)
 
-# ==================== PAYMENT MANAGEMENT ====================
+#  PAYMENT MANAGEMENT 
 
 @app.route('/payments')
 @login_required(role='agent')
@@ -577,7 +577,7 @@ def pay_premium(policy_no):
     conn.close()
     return render_template('pay_premium.html', policy=policy)
 
-# ==================== REPORTS ====================
+#  REPORTS 
 
 @app.route('/reports/commission')
 @login_required(role='agent')
@@ -620,7 +620,7 @@ def business_report():
     
     return render_template('business_report.html', data=data, report_type=report_type)
 
-# ==================== ERROR HANDLERS ====================
+#  ERROR HANDLERS 
 
 @app.errorhandler(404)
 def not_found(e):
