@@ -1,0 +1,49 @@
+<!-- templates/payments.html -->
+{% extends "base.html" %}
+{% block title %}Payments - IMS{% endblock %}
+
+{% block content %}
+<h1 class="mb-2">Premium Payments</h1>
+
+<div class="card">
+    <h3 class="card-header">Policies Due for Payment</h3>
+    {% if policies %}
+    <table>
+        <thead>
+            <tr>
+                <th>Policy No</th>
+                <th>Holder Name</th>
+                <th>Premium Amount</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for policy in policies %}
+            <tr>
+                <td>{{ policy.Policy_no }}</td>
+                <td>{{ policy.Holder_Name }}</td>
+                <td>₹{{ "{:,.2f}".format(policy.Premium) }}</td>
+                <td>{{ policy.FUP }}</td>
+                <td>
+                    {% set today = [] %}
+                    {% if policy.FUP|string < today|string %}
+                    <span style="color: var(--danger);">Overdue</span>
+                    {% else %}
+                    <span style="color: var(--warning);">Due</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('pay_premium', policy_no=policy.Policy_no) }}" class="btn btn-sm btn-success">Pay Now</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-center">No pending payments. All policies are up to date!</p>
+    {% endif %}
+</div>
+{% endblock %}
+

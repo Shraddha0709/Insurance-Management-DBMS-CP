@@ -1,0 +1,56 @@
+<!-- templates/policies.html -->
+{% extends "base.html" %}
+{% block title %}Policies - IMS{% endblock %}
+
+{% block content %}
+<div class="flex justify-between mb-2">
+    <h1>My Policies</h1>
+    <a href="{{ url_for('add_policy') }}" class="btn btn-primary">Create New Policy</a>
+</div>
+
+<div class="card">
+    {% if policies %}
+    <table>
+        <thead>
+            <tr>
+                <th>Policy No</th>
+                <th>Holder Name</th>
+                <th>Plan</th>
+                <th>Premium</th>
+                <th>Mode</th>
+                <th>Next Due</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for policy in policies %}
+            <tr>
+                <td>{{ policy.Policy_no }}</td>
+                <td>{{ policy.Holder_Name }}</td>
+                <td>{{ policy.Plan_Name }}</td>
+                <td>₹{{ "{:,.2f}".format(policy.Premium) }}</td>
+                <td>{{ policy.Mode }}</td>
+                <td>{{ policy.FUP if policy.FUP else 'Matured' }}</td>
+                <td>
+                    {% if policy.Status == 1 %}
+                    <span style="color: var(--success);">Active</span>
+                    {% else %}
+                    <span style="color: var(--secondary);">Inactive</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if policy.Status == 1 and policy.FUP %}
+                    <a href="{{ url_for('pay_premium', policy_no=policy.Policy_no) }}" class="btn btn-sm btn-success">Pay Premium</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-center">No policies found. Create your first policy!</p>
+    {% endif %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,38 @@
+<!-- templates/dashboard.html -->
+{% extends "base.html" %}
+{% block title %}Dashboard - IMS{% endblock %}
+
+{% block content %}
+<h1 class="mb-2">Welcome, {{ session.name }}!</h1>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+    {% if session.role == 'admin' %}
+    <div class="card" style="text-align: center;">
+        <h3>Manage Plans</h3>
+        <p style="color: var(--secondary); margin: 1rem 0;">Create and edit insurance plans</p>
+        <a href="{{ url_for('plans') }}" class="btn btn-primary">View Plans</a>
+    </div>
+    <div class="card" style="text-align: center;">
+        <h3>Business Reports</h3>
+        <p style="color: var(--secondary); margin: 1rem 0;">View business analytics</p>
+        <a href="{{ url_for('business_report') }}" class="btn btn-primary">View Reports</a>
+    </div>
+    {% else %}
+    <div class="card" style="text-align: center;">
+        <h3>My Policies</h3>
+        <p style="color: var(--secondary); margin: 1rem 0;">Manage and create policies</p>
+        <a href="{{ url_for('policies') }}" class="btn btn-primary">View Policies</a>
+    </div>
+    <div class="card" style="text-align: center;">
+        <h3>Payments</h3>
+        <p style="color: var(--secondary); margin: 1rem 0;">Process premium payments</p>
+        <a href="{{ url_for('payments') }}" class="btn btn-primary">Manage Payments</a>
+    </div>
+    <div class="card" style="text-align: center;">
+        <h3>Commission Report</h3>
+        <p style="color: var(--secondary); margin: 1rem 0;">View your earnings</p>
+        <a href="{{ url_for('commission_report') }}" class="btn btn-primary">View Commission</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

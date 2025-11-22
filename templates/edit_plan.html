@@ -1,0 +1,107 @@
+<!-- templates/edit_plan.html -->
+{% extends "base.html" %}
+{% block title %}Edit Plan - IMS{% endblock %}
+
+{% block content %}
+<h1 class="mb-2">Edit Plan: {{ plan.Plan_no }} - {{ plan.Name }}</h1>
+
+<div class="card">
+    <form method="POST">
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+            <div class="form-group">
+                <label for="name">Plan Name</label>
+                <input type="text" id="name" name="name" value="{{ plan.Name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="mma">Max Maturity Age (MMA)</label>
+                <input type="number" id="mma" name="mma" value="{{ plan.MMA }}" min="1" max="100" required>
+            </div>
+            <div class="form-group">
+                <label for="min_sa">Minimum Sum Assured</label>
+                <input type="number" id="min_sa" name="min_sa" value="{{ plan.Min_SA }}" step="1000" required>
+            </div>
+            <div class="form-group">
+                <label for="max_sa">Maximum Sum Assured</label>
+                <input type="number" id="max_sa" name="max_sa" value="{{ plan.Max_SA }}" step="1000" required>
+            </div>
+            <div class="form-group">
+                <label for="min_age">Minimum Age</label>
+                <input type="number" id="min_age" name="min_age" value="{{ plan.Min_Age }}" min="1" max="100" required>
+            </div>
+            <div class="form-group">
+                <label for="max_age">Maximum Age</label>
+                <input type="number" id="max_age" name="max_age" value="{{ plan.Max_Age }}" min="1" max="100" required>
+            </div>
+        </div>
+
+        <h3 class="mt-2 mb-1">Term Options</h3>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+            <div class="form-group">
+                <label for="t1">Term 1</label>
+                <input type="number" id="t1" name="t1" value="{{ plan.T1 if plan.T1 else '' }}">
+            </div>
+            <div class="form-group">
+                <label for="t2">Term 2</label>
+                <input type="number" id="t2" name="t2" value="{{ plan.T2 if plan.T2 else '' }}">
+            </div>
+            <div class="form-group">
+                <label for="t3">Term 3</label>
+                <input type="number" id="t3" name="t3" value="{{ plan.T3 if plan.T3 else '' }}">
+            </div>
+            <div class="form-group">
+                <label for="t4">Term 4</label>
+                <input type="number" id="t4" name="t4" value="{{ plan.T4 if plan.T4 else '' }}">
+            </div>
+        </div>
+
+        <h3 class="mt-2 mb-1">Premium Payment Terms</h3>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+            <div class="form-group">
+                <label for="p1">Payment Term 1</label>
+                <input type="number" id="p1" name="p1" value="{{ plan.P1 if plan.P1 else '' }}">
+            </div>
+            <div class="form-group">
+                <label for="p2">Payment Term 2</label>
+                <input type="number" id="p2" name="p2" value="{{ plan.P2 if plan.P2 else '' }}">
+            </div>
+            <div class="form-group">
+                <label for="p3">Payment Term 3</label>
+                <input type="number" id="p3" name="p3" value="{{ plan.P3 if plan.P3 else '' }}">
+            </div>
+            <div class="form-group">
+                <label for="p4">Payment Term 4</label>
+                <input type="number" id="p4" name="p4" value="{{ plan.P4 if plan.P4 else '' }}">
+            </div>
+        </div>
+
+        <h3 class="mt-2 mb-1">Payment Modes</h3>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="yearly" value="1" {% if plan.Yearly %}checked{% endif %}> Yearly
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="half_yearly" value="1" {% if plan.Half_yearly %}checked{% endif %}> Half-yearly
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="quarterly" value="1" {% if plan.Quarterly %}checked{% endif %}> Quarterly
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="monthly" value="1" {% if plan.Monthly %}checked{% endif %}> Monthly
+                </label>
+            </div>
+        </div>
+
+        <div class="flex gap-1 mt-2">
+            <button type="submit" class="btn btn-primary">Update Plan</button>
+            <a href="{{ url_for('plans') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

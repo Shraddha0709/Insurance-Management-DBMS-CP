@@ -1,0 +1,106 @@
+<!-- templates/add_policy.html -->
+{% extends "base.html" %}
+{% block title %}Create Policy - IMS{% endblock %}
+
+{% block content %}
+<h1 class="mb-2">Create New Policy</h1>
+
+<div class="card">
+    <form method="POST">
+        <h3 class="card-header">Policy Details</h3>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+            <div class="form-group">
+                <label for="plan_no">Select Plan</label>
+                <select id="plan_no" name="plan_no" required>
+                    <option value="">-- Select Plan --</option>
+                    {% for plan in plans %}
+                    <option value="{{ plan.Plan_no }}">{{ plan.Plan_no }} - {{ plan.Name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="term">Policy Term (Years)</label>
+                <input type="number" id="term" name="term" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="sum_assured">Sum Assured</label>
+                <input type="number" id="sum_assured" name="sum_assured" step="1000" required>
+            </div>
+            <div class="form-group">
+                <label for="mode">Payment Mode</label>
+                <select id="mode" name="mode" required>
+                    <option value="Yearly">Yearly</option>
+                    <option value="Half-yearly">Half-yearly</option>
+                    <option value="Quarterly">Quarterly</option>
+                    <option value="Monthly">Monthly</option>
+                </select>
+            </div>
+        </div>
+
+        <h3 class="card-header mt-2">Policy Holder Information</h3>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="occupation">Occupation</label>
+                <input type="text" id="occupation" name="occupation" required>
+            </div>
+            <div class="form-group">
+                <label for="education">Education</label>
+                <input type="text" id="education" name="education" required>
+            </div>
+        </div>
+
+        <h3 class="card-header mt-2">Address Information</h3>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+            <div class="form-group" style="grid-column: 1 / -1;">
+                <label for="address">Address</label>
+                <textarea id="address" name="address" rows="2" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" id="city" name="city" required>
+            </div>
+            <div class="form-group">
+                <label for="state">State</label>
+                <input type="text" id="state" name="state" required>
+            </div>
+            <div class="form-group">
+                <label for="pincode">Pincode</label>
+                <input type="text" id="pincode" name="pincode" pattern="\d{6}" required>
+            </div>
+        </div>
+
+        <h3 class="card-header mt-2">Nominee Information</h3>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+            <div class="form-group">
+                <label for="nominee_name">Nominee Name</label>
+                <input type="text" id="nominee_name" name="nominee_name" required>
+            </div>
+            <div class="form-group">
+                <label for="nominee_relation">Relation</label>
+                <input type="text" id="nominee_relation" name="nominee_relation" required>
+            </div>
+        </div>
+
+        <div class="flex gap-1 mt-2">
+            <button type="submit" class="btn btn-primary">Create Policy</button>
+            <a href="{{ url_for('policies') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+<!-- templates/register.html -->
+{% extends "base.html" %}
+{% block title %}Register - IMS{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 2rem auto;">
+    <div class="card">
+        <h2 class="card-header">Register as {{ role|title }}</h2>
+        <form method="POST">
+            {% if role == 'admin' %}
+            <div class="form-group">
+                <label for="admin_id">Admin ID (5 digits)</label>
+                <input type="text" id="admin_id" name="admin_id" pattern="\d{5}" required>
+            </div>
+            <div class="form-group">
+                <label for="designation">Designation</label>
+                <input type="text" id="designation" name="designation" required>
+            </div>
+            {% else %}
+            <div class="form-group">
+                <label for="agency_code">Agency Code (7 digits)</label>
+                <input type="text" id="agency_code" name="agency_code" pattern="\d{7}" required>
+            </div>
+            <div class="form-group">
+                <label for="admin_id">Admin ID (Your managing admin)</label>
+                <input type="text" id="admin_id" name="admin_id" pattern="\d{5}" required>
+            </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <label for="branch_id">Branch ID</label>
+                <input type="text" id="branch_id" name="branch_id" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="mobile">Mobile</label>
+                <input type="tel" id="mobile" name="mobile" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" minlength="6" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" minlength="6" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Register</button>
+            <p class="mt-2 text-center">
+                Already have an account? <a href="{{ url_for('login') }}">Login</a>
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}

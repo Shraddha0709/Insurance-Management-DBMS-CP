@@ -1,0 +1,62 @@
+<!-- templates/pay_premium.html -->
+{% extends "base.html" %}
+{% block title %}Pay Premium - IMS{% endblock %}
+
+{% block content %}
+<h1 class="mb-2">Pay Premium</h1>
+
+<div class="card">
+    <h3 class="card-header">Policy Information</h3>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem;">
+        <div>
+            <strong>Policy Number:</strong> {{ policy.Policy_no }}
+        </div>
+        <div>
+            <strong>Holder Name:</strong> {{ policy.Holder_Name }}
+        </div>
+        <div>
+            <strong>Premium Amount:</strong> ₹{{ "{:,.2f}".format(policy.Premium) }}
+        </div>
+        <div>
+            <strong>Due Date:</strong> {{ policy.FUP }}
+        </div>
+        <div>
+            <strong>Payment Mode:</strong> {{ policy.Mode }}
+        </div>
+        <div>
+            <strong>Status:</strong> 
+            {% if policy.Status == 1 %}
+            <span style="color: var(--success);">Active</span>
+            {% else %}
+            <span style="color: var(--secondary);">Inactive</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <h3 class="card-header">Payment Details</h3>
+    <form method="POST">
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+            <div class="form-group">
+                <label for="amount">Payment Amount (₹)</label>
+                <input type="number" id="amount" name="amount" step="0.01" 
+                       value="{{ policy.Premium }}" min="{{ policy.Premium }}" required>
+                <small style="color: var(--secondary);">Minimum: ₹{{ "{:,.2f}".format(policy.Premium) }}</small>
+            </div>
+            <div class="form-group">
+                <label for="mode">Payment Method</label>
+                <select id="mode" name="mode" required>
+                    <option value="Cash">Cash</option>
+                    <option value="Cheque">Cheque</option>
+                    <option value="Online">Online Transfer</option>
+                    <option value="Card">Card</option>
+                </select>
+            </div>
+        </div>
+        <div class="flex gap-1 mt-2">
+            <button type="submit" class="btn btn-success">Process Payment</button>
+            <a href="{{ url_for('payments') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

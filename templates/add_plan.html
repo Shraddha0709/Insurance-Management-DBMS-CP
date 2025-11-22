@@ -1,0 +1,104 @@
+<!-- templates/add_plan.html -->
+{% extends "base.html" %}
+{% block title %}Add Plan - IMS{% endblock %}
+
+{% block content %}
+<h1 class="mb-2">Add New Plan</h1>
+
+<div class="card">
+    <form method="POST">
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+            <div class="form-group">
+                <label for="plan_no">Plan Number (3 digits)</label>
+                <input type="text" id="plan_no" name="plan_no" pattern="\d{3}" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Plan Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="mma">Max Maturity Age (MMA)</label>
+                <input type="number" id="mma" name="mma" min="1" max="100" required>
+            </div>
+            <div class="form-group">
+                <label for="min_sa">Minimum Sum Assured</label>
+                <input type="number" id="min_sa" name="min_sa" step="1000" required>
+            </div>
+            <div class="form-group">
+                <label for="max_sa">Maximum Sum Assured</label>
+                <input type="number" id="max_sa" name="max_sa" step="1000" required>
+            </div>
+            <div class="form-group">
+                <label for="min_age">Minimum Age</label>
+                <input type="number" id="min_age" name="min_age" min="1" max="100" required>
+            </div>
+            <div class="form-group">
+                <label for="max_age">Maximum Age</label>
+                <input type="number" id="max_age" name="max_age" min="1" max="100" required>
+            </div>
+        </div>
+
+        <h3 class="mt-2 mb-1">Term Options</h3>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+            <div class="form-group">
+                <label for="t1">Term 1</label>
+                <input type="number" id="t1" name="t1">
+            </div>
+            <div class="form-group">
+                <label for="t2">Term 2</label>
+                <input type="number" id="t2" name="t2">
+            </div>
+            <div class="form-group">
+                <label for="t3">Term 3</label>
+                <input type="number" id="t3" name="t3">
+            </div>
+            <div class="form-group">
+                <label for="t4">Term 4</label>
+                <input type="number" id="t4" name="t4">
+            </div>
+        </div>
+
+        <h3 class="mt-2 mb-1">Premium Payment Terms</h3>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+            <div class="form-group">
+                <label for="p1">Payment Term 1</label>
+                <input type="number" id="p1" name="p1">
+            </div>
+            <div class="form-group">
+                <label for="p2">Payment Term 2</label>
+                <input type="number" id="p2" name="p2">
+            </div>
+            <div class="form-group">
+                <label for="p3">Payment Term 3</label>
+                <input type="number" id="p3" name="p3">
+            </div>
+            <div class="form-group">
+                <label for="p4">Payment Term 4</label>
+                <input type="number" id="p4" name="p4">
+            </div>
+        </div>
+
+        <h3 class="mt-2 mb-1">Payment Modes</h3>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+            <div class="form-group">
+                <label><input type="checkbox" name="yearly" value="1"> Yearly</label>
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" name="half_yearly" value="1"> Half-yearly</label>
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" name="quarterly" value="1"> Quarterly</label>
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" name="monthly" value="1"> Monthly</label>
+            </div>
+        </div>
+
+        <div class="flex gap-1 mt-2">
+            <button type="submit" class="btn btn-primary">Add Plan</button>
+            <a href="{{ url_for('plans') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

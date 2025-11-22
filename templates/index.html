@@ -1,0 +1,17 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+{% block title %}Home - Insurance Management System{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 3rem 0;">
+    <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Welcome to Insurance Management System</h1>
+    <p style="font-size: 1.25rem; color: var(--secondary); margin-bottom: 2rem;">
+        Manage your insurance policies efficiently
+    </p>
+    <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+        <a href="{{ url_for('register', role='admin') }}" class="btn btn-secondary">Register as Admin</a>
+        <a href="{{ url_for('register', role='agent') }}" class="btn btn-secondary">Register as Agent</a>
+    </div>
+</div>
+{% endblock %}
