@@ -17,7 +17,7 @@ app.secret_key = os.getenv('SECRET_KEY', secrets.token_hex(32))
 db_config = {
     'host': os.getenv('DB_HOST', 'localhost'),
     'user': os.getenv('DB_USER', 'root'),
-    'password': os.getenv('DB_PASS', 'kholna'),
+    'password': os.getenv('DB_PASS', ''),
     'database': os.getenv('DB_NAME', 'claude_db'),
     'pool_name': 'insurance_pool',
     'pool_size': 10
