@@ -33,6 +33,8 @@ A comprehensive web-based Insurance Management System built with Python Flask an
 - MySQL 8.0 or higher
 - pip (Python package manager)
 
+Activate : .\myenv\Scripts\activate 
+
 ### Setup Instructions
 
 1. **Clone or extract the project**
